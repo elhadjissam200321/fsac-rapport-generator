@@ -31,7 +31,6 @@ export default CoverPreview;
    ══════════════════════════════════════════════ */
 const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
   const combinedLogo = "/fsac-logo.jpg";
-  const watermark = "/watermark.png";
 
   const DARK_BLUE = "#1A3A6E";
 
@@ -56,9 +55,6 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
       boxSizing: "border-box",
       boxShadow: "0 4px 40px rgba(0,0,0,0.18)",
       position: "relative",
-      backgroundImage: `url(${watermark})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
       overflow: "hidden"
     }}>
 
