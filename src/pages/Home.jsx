@@ -134,13 +134,13 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <Link
               to="/pdf-tools"
-              className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[9px] lg:text-[10px] font-bold hover:bg-blue-500/40 transition-all uppercase tracking-wider whitespace-nowrap"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10px] font-bold hover:bg-blue-500/40 transition-all uppercase tracking-wider whitespace-nowrap"
             >
               🛠️ <span className="hidden xs:inline">Outils</span>
             </Link>
             <button
               onClick={handleShare}
-              className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] lg:text-[10px] font-bold hover:bg-emerald-500/40 transition-all uppercase tracking-wider whitespace-nowrap"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold hover:bg-emerald-500/40 transition-all uppercase tracking-wider whitespace-nowrap"
             >
               🔗 <span className="hidden xs:inline">Partager</span>
             </button>
@@ -152,7 +152,7 @@ export default function Home() {
         </div>
       </header>
 
-      <div className="max-w-screen-xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
+      <div className="max-w-screen-xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6 mb-20 lg:mb-0">
         <aside className="w-full lg:w-[420px] lg:sticky lg:top-24 h-fit">
           <InputForm data={data} update={update} />
         </aside>
@@ -179,6 +179,22 @@ export default function Home() {
           </div>
         </main>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="sm:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 px-6 py-3 flex items-center justify-between z-[100] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+        <Link to="/" className="flex flex-col items-center gap-1 text-blue-600">
+          <span className="text-xl">🏠</span>
+          <span className="text-[10px] font-bold uppercase tracking-tighter">Éditeur</span>
+        </Link>
+        <Link to="/pdf-tools" className="flex flex-col items-center gap-1 text-slate-500">
+          <span className="text-xl">🛠️</span>
+          <span className="text-[10px] font-bold uppercase tracking-tighter">Outils PDF</span>
+        </Link>
+        <button onClick={handleShare} className="flex flex-col items-center gap-1 text-slate-500">
+          <span className="text-xl">🔗</span>
+          <span className="text-[10px] font-bold uppercase tracking-tighter">Partager</span>
+        </button>
+      </nav>
     </div>
   );
 }

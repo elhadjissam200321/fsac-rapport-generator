@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
-import { Document, Paragraph, TextRun, AlignmentType, BorderStyle, Table, TableRow, TableCell, WidthType, Packer, ImageRun } from "docx";
+import { Document, Paragraph, Packer, ImageRun } from "docx";
 import { saveAs } from "file-saver";
+import html2canvas from "html2canvas";
+import html2pdf from "html2pdf.js";
 import fsacLogo from "../FSAC LOGO.jpg";
 
 const templates = [
@@ -89,121 +91,61 @@ export default function InputForm({ data, update }) {
 
   const exportDOCX = async () => {
     setLoadingDocx(true);
-    const blue = "1A3A6E";
-    // Precise unit conversion: 1mm = 56.7 twips
-    const mmToTwips = (mm) => Math.round(mm * 56.7);
-    const ptToHalfPt = (pt) => Math.round(pt * 2);
-
-    const centered = (text, opts = {}) => new Paragraph({
-      alignment: AlignmentType.CENTER,
-      spacing: { after: opts.after || mmToTwips(4) },
-      children: [new TextRun({
-        text: text || "",
-        font: "Times New Roman",
-        size: ptToHalfPt(opts.size || 12),
-        ...opts
-      })],
-    });
-
-    const titleBox = (text) => new Table({
-      width: { size: 100, type: WidthType.PERCENTAGE },
-      rows: [new TableRow({
-        children: [new TableCell({
-          borders: {
-            top: { style: BorderStyle.SINGLE, size: 6, color: "000000" },
-            bottom: { style: BorderStyle.SINGLE, size: 6, color: "000000" },
-            left: { style: BorderStyle.SINGLE, size: 6, color: "000000" },
-            right: { style: BorderStyle.SINGLE, size: 6, color: "000000" },
-          },
-          children: [new Paragraph({
-            alignment: AlignmentType.CENTER,
-            spacing: { before: mmToTwips(8), after: mmToTwips(8) },
-            children: [new TextRun({
-              text: (text || "").toUpperCase(),
-              bold: true,
-              size: ptToHalfPt(parseInt(data.titleSize || 14)),
-              font: "Times New Roman"
-            })],
-          })],
-        })]
-      })]
-    });
-
-    let logoImageRun = null;
-    try {
-      const response = await fetch(fsacLogo);
-      const buffer = await response.arrayBuffer();
-      // 100mm = 283 points (at 72dpi)
-      logoImageRun = new ImageRun({
-        data: buffer,
-        transformation: { width: 283, height: 71 }, // Aspect ratio preserved
-      });
-    } catch (e) {
-      console.error("Logo load failed for docx:", e);
+    const element = document.getElementById("cover-page");
+    if (!element) {
+      setLoadingDocx(false);
+      return;
     }
 
-    const doc = new Document({
-      sections: [{
-        properties: { page: { margin: { top: mmToTwips(20), bottom: mmToTwips(20), left: mmToTwips(20), right: mmToTwips(20) } } },
-        children: [
-          // Header Logo
-          logoImageRun ? new Paragraph({ alignment: AlignmentType.CENTER, children: [logoImageRun], spacing: { after: mmToTwips(15) } }) : new Paragraph({}),
+    try {
+      // Capture at 3x scale for high resolution
+      const canvas = await html2canvas(element, {
+        scale: 3,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff"
+      });
 
-          // Horizontal Line (matching CSS margin: 5mm 0)
-          new Paragraph({
-            border: { bottom: { color: blue, style: BorderStyle.SINGLE, size: 6 } },
-            spacing: { after: mmToTwips(5) },
-            children: [],
-          }),
+      const dataUrl = canvas.toDataURL("image/png");
+      const base64Data = dataUrl.split(",")[1];
+      const binaryData = atob(base64Data);
+      const arrayBuffer = new ArrayBuffer(binaryData.length);
+      const view = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < binaryData.length; i++) {
+        view[i] = binaryData.charCodeAt(i);
+      }
 
-          centered(data.documentType || "PROJET DE FIN DE MODULE", { italics: true, size: 14, after: mmToTwips(4) }),
-          centered(data.UE || "Mathématiques", { bold: true, size: 16, color: blue, after: mmToTwips(12) }),
+      const doc = new Document({
+        sections: [{
+          properties: {
+            page: {
+              margin: { top: 0, bottom: 0, left: 0, right: 0 }
+            }
+          },
+          children: [
+            new Paragraph({
+              children: [
+                new ImageRun({
+                  data: arrayBuffer,
+                  transformation: {
+                    width: 595.28, // A4 width in points
+                    height: 841.89, // A4 height in points
+                  },
+                }),
+              ],
+            }),
+          ],
+        }],
+      });
 
-          titleBox(data.projectTitle),
-          new Paragraph({ spacing: { after: mmToTwips(25) }, children: [] }),
-
-          new Table({
-            width: { size: 100, type: WidthType.PERCENTAGE },
-            borders: {
-              top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.NONE },
-              left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE },
-              insideHorizontal: { style: BorderStyle.NONE }, insideVertical: { style: BorderStyle.NONE },
-            },
-            rows: [
-              new TableRow({
-                children: [
-                  new TableCell({
-                    width: { size: 50, type: WidthType.PERCENTAGE },
-                    children: [
-                      new Paragraph({ border: { bottom: { color: blue, style: BorderStyle.SINGLE, size: 6 } }, spacing: { after: mmToTwips(2) }, children: [new TextRun({ text: "Rapport réalisé par l’équipe :", italics: true, font: "Times New Roman" })] }),
-                      ...(data.students || []).map(s => new Paragraph({ spacing: { before: mmToTwips(1) }, children: [new TextRun({ text: s.name, bold: true, font: "Times New Roman", size: ptToHalfPt(13) })] }))
-                    ],
-                  }),
-                  new TableCell({
-                    width: { size: 50, type: WidthType.PERCENTAGE },
-                    children: [
-                      new Paragraph({ alignment: AlignmentType.RIGHT, border: { bottom: { color: blue, style: BorderStyle.SINGLE, size: 6 } }, spacing: { after: mmToTwips(2) }, children: [new TextRun({ text: "Supervisé par :", italics: true, font: "Times New Roman" })] }),
-                      new Paragraph({ alignment: AlignmentType.RIGHT, spacing: { before: mmToTwips(1) }, children: [new TextRun({ text: data.professor || "Pr. Nom Professeur", bold: true, font: "Times New Roman", size: ptToHalfPt(13), color: blue })] })
-                    ],
-                  }),
-                ],
-              }),
-            ],
-          }),
-
-          new Paragraph({ spacing: { after: mmToTwips(30) }, children: [] }),
-          new Paragraph({
-            border: { bottom: { color: "000000", style: BorderStyle.SINGLE, size: 6 } },
-            spacing: { after: mmToTwips(5) },
-            children: [],
-          }),
-          centered(`Année Universitaire : ${data.academicYear || "2025/2026"}`, { bold: true, size: 12, color: blue }),
-        ],
-      }],
-    });
-    const blob = await Packer.toBlob(doc);
-    saveAs(blob, `Page_de_Garde_${(data.sujet || "Rapport").replace(/\s+/g, '_')}.docx`);
-    setLoadingDocx(false);
+      const blob = await Packer.toBlob(doc);
+      saveAs(blob, `Page_de_Garde_${(data.sujet || "Rapport").replace(/\s+/g, '_')}.docx`);
+    } catch (error) {
+      console.error("DOCX Export Error:", error);
+      alert("Erreur lors de l'export Word.");
+    } finally {
+      setLoadingDocx(false);
+    }
   };
 
   return (
