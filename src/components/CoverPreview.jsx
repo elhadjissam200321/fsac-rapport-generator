@@ -73,11 +73,11 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
             {data.master}
           </div>
         )}
+        <div style={{ fontSize: "15pt", fontStyle: "italic", color: "#555", marginTop: "1mm" }}>
+          {data.documentType || "Projet de fin de module"}
+        </div>
         <div style={{ fontSize: "18pt", fontWeight: "bold", color: DARK_BLUE }}>
           {data.UE || "Mathématiques pour l’analyse des données"}
-        </div>
-        <div style={{ fontSize: "15pt", fontStyle: "italic", color: "#555", marginTop: "2mm" }}>
-          {data.documentType || "Projet de fin de module"}
         </div>
       </div>
 
