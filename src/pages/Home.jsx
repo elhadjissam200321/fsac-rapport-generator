@@ -134,15 +134,15 @@ export default function Home() {
           <div className="flex items-center gap-3">
             <Link
               to="/pdf-tools"
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10px] font-bold hover:bg-blue-500/40 transition-all uppercase tracking-wider"
+              className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[9px] lg:text-[10px] font-bold hover:bg-blue-500/40 transition-all uppercase tracking-wider whitespace-nowrap"
             >
-              🛠️ Outils
+              🛠️ <span className="hidden xs:inline">Outils</span>
             </Link>
             <button
               onClick={handleShare}
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-bold hover:bg-emerald-500/40 transition-all uppercase tracking-wider"
+              className="flex items-center gap-1.5 px-2 lg:px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[9px] lg:text-[10px] font-bold hover:bg-emerald-500/40 transition-all uppercase tracking-wider whitespace-nowrap"
             >
-              🔗 Partager
+              🔗 <span className="hidden xs:inline">Partager</span>
             </button>
             <div className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] lg:text-xs font-bold uppercase tracking-widest transition-all shadow-sm ${isSaved ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-amber-500/20 text-amber-400 border border-amber-500/30"}`}>
               <span className={`w-2 h-2 rounded-full ${isSaved ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]" : "bg-amber-400 animate-pulse"}`}></span>
