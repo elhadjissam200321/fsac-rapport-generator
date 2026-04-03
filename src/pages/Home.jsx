@@ -27,10 +27,10 @@ export const defaultData = {
     { name: "Sara BENNANI", cne: "" }
   ],
   professor: "CHERGUI BRAHIM",
-  master: "",
+  master: "Master Ingénierie des Systèmes Intelligents",
   isSolo: false,
   academicYear: "2025/2026",
-  UE: "Mathématiques",
+  UE: "Mathématiques pour l’analyse des données",
   sujet: "Optimisation et Recherche Opérationnelle",
 };
 
