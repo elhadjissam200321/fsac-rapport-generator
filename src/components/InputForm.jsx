@@ -162,6 +162,25 @@ export default function InputForm({ data, update }) {
         </select>
       </Section>
 
+      <section className="bg-blue-50/50 p-3 rounded-lg border border-blue-100">
+        <div className="flex items-center justify-between">
+          <div>
+            <label className="text-[10px] font-bold text-blue-600 uppercase block">Mode de rendu</label>
+            <p className="text-[9px] text-slate-400">Équipe ou Individuel (gras)</p>
+          </div>
+          <div className="flex bg-white p-0.5 rounded-lg border border-slate-200 shadow-sm">
+            <button
+              onClick={() => update("isSolo", false)}
+              className={`px-3 py-1 text-[9px] font-bold rounded-md transition-all ${!data.isSolo ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            >ÉQUIPE</button>
+            <button
+              onClick={() => update("isSolo", true)}
+              className={`px-3 py-1 text-[9px] font-bold rounded-md transition-all ${data.isSolo ? "bg-blue-600 text-white shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            >INDIVIDUEL</button>
+          </div>
+        </div>
+      </section>
+
       <Section title="Document">
         <Field label="Type de document (ex: Rapport / Thèse)" value={data.documentType} onChange={(v) => update("documentType", v)} placeholder="Projet de fin de module" />
         <Field label="Diplôme / Master / Option" value={data.master} onChange={(v) => update("master", v)} placeholder="Master en Mathématiques et Informatique" />
@@ -187,20 +206,6 @@ export default function InputForm({ data, update }) {
       </Section>
 
       <Section title="Étudiants (Réalisé par)">
-        <div className="flex items-center justify-between mb-2">
-          <label className="text-[10px] font-bold text-slate-500 uppercase">Mode de rendu</label>
-          <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-            <button
-              onClick={() => update("isSolo", false)}
-              className={`px-2 py-1 text-[9px] font-bold rounded-md transition-all ${!data.isSolo ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-            >ÉQUIPE</button>
-            <button
-              onClick={() => update("isSolo", true)}
-              className={`px-2 py-1 text-[9px] font-bold rounded-md transition-all ${data.isSolo ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
-            >INDIVIDUEL</button>
-          </div>
-        </div>
-
         <div className="space-y-2">
           {data.students.map((s, i) => (
             <div key={i} className="flex gap-2 items-center">
