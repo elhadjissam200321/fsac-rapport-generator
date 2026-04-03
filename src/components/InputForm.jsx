@@ -80,6 +80,7 @@ export default function InputForm({ data, update }) {
         image: { type: "jpeg", quality: 1 },
         html2canvas: { scale: 3, useCORS: true, logging: false },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: "avoid-all" }
       })
       .from(element)
       .save();

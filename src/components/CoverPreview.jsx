@@ -58,7 +58,8 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
       position: "relative",
       backgroundImage: `url(${watermark})`,
       backgroundSize: "cover",
-      backgroundPosition: "center"
+      backgroundPosition: "center",
+      overflow: "hidden"
     }}>
 
       {/* Header: Centered Logo */}
