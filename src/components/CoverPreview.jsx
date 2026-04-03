@@ -69,8 +69,8 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
       {/* Academic Info: Master & UE (After Divider) */}
       <div style={{ textAlign: "center", marginTop: "3mm", display: "flex", flexDirection: "column", gap: "2mm" }}>
         {data.master && (
-          <div style={{ fontSize: "16pt", fontWeight: "bold", color: "#444", textTransform: "uppercase" }}>
-            {data.master}
+          <div style={{ fontSize: "16pt", fontWeight: "bold", color: "#444" }}>
+            MASTER : {data.master.toUpperCase()}
           </div>
         )}
         <div style={{ fontSize: "15pt", fontStyle: "italic", color: "#555", marginTop: "1mm" }}>
