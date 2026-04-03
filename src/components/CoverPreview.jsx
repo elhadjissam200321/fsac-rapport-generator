@@ -59,31 +59,25 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
     }}>
 
       {/* Header: Centered Logo & Master/Diplôme */}
-      <div style={{ textAlign: "center", marginBottom: "8mm", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <img src={combinedLogo} alt="Logo" style={{ width: "100mm", objectFit: "contain", display: "block", marginBottom: "2mm" }} />
-        {data.master && (
-          <div style={{
-            fontSize: "14pt",
-            fontWeight: "bold",
-            color: DARK_BLUE,
-            textAlign: "center",
-            maxWidth: "80%",
-            lineHeight: 1.2
-          }}>
-            {data.master.toUpperCase()}
-          </div>
-        )}
+      {/* Header: Centered Logo */}
+      <div style={{ textAlign: "center", marginBottom: "5mm", display: "flex", justifyContent: "center" }}>
+        <img src={combinedLogo} alt="Logo" style={{ width: "100mm", objectFit: "contain", display: "block" }} />
       </div>
 
       <div style={{ height: "1px", backgroundColor: DARK_BLUE, width: "100%", margin: "5mm 0" }} />
 
-      {/* Title section (Dynamic) */}
-      <div style={{ textAlign: "center", marginTop: "5mm" }}>
-        <div style={{ fontSize: "16pt", fontStyle: "italic", color: "#444" }}>
-          {data.documentType || "PROJET DE FIN DE MODULE"}
+      {/* Academic Info: Master & UE (After Divider) */}
+      <div style={{ textAlign: "center", marginTop: "3mm", display: "flex", flexDirection: "column", gap: "2mm" }}>
+        {data.master && (
+          <div style={{ fontSize: "16pt", fontWeight: "bold", color: "#444", textTransform: "uppercase" }}>
+            {data.master}
+          </div>
+        )}
+        <div style={{ fontSize: "18pt", fontWeight: "bold", color: DARK_BLUE }}>
+          {data.UE || "Mathématiques pour l’analyse des données"}
         </div>
-        <div style={{ fontSize: "16pt", marginTop: "2mm", color: DARK_BLUE }}>
-          <span style={{ fontWeight: "bold" }}>{data.UE || "Mathématiques"}</span>
+        <div style={{ fontSize: "15pt", fontStyle: "italic", color: "#555", marginTop: "2mm" }}>
+          {data.documentType || "Projet de fin de module"}
         </div>
       </div>
 
