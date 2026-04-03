@@ -17,7 +17,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['FSAC LOGO.jpg'],
+      includeAssets: ['fsac-logo.jpg', 'watermark.png'],
       manifest: {
         name: 'Générateur Page de Garde FSAC',
         short_name: 'FSAC Rapport',
@@ -27,7 +27,7 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: 'FSAC LOGO.jpg',
+            src: 'fsac-logo.jpg',
             sizes: '192x192 512x512',
             type: 'image/jpg'
           }

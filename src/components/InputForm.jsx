@@ -164,6 +164,7 @@ export default function InputForm({ data, update }) {
 
       <Section title="Document">
         <Field label="Type de document (ex: Rapport / Thèse)" value={data.documentType} onChange={(v) => update("documentType", v)} placeholder="Projet de fin de module" />
+        <Field label="Diplôme / Master / Option" value={data.master} onChange={(v) => update("master", v)} placeholder="Master en Mathématiques et Informatique" />
         <Field label="Module / UE" value={data.UE} onChange={(v) => update("UE", v)} placeholder="Mathématiques" />
         <Field label="Sujet / Thème (opt.)" value={data.sujet} onChange={(v) => update("sujet", v)} placeholder="Optimisation" />
       </Section>
@@ -186,20 +187,41 @@ export default function InputForm({ data, update }) {
       </Section>
 
       <Section title="Étudiants (Réalisé par)">
-        {data.students.map((s, i) => (
-          <div key={i} className="flex gap-2 items-center">
-            <input
-              className="flex-1 px-2 py-1.5 text-xs border border-slate-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-400"
-              placeholder="Nom et Prénom"
-              value={s.name}
-              onChange={(e) => updateStudent(i, "name", e.target.value)}
-            />
-            {data.students.length > 1 && (
-              <button onClick={() => removeStudent(i)} className="text-red-400 hover:text-red-600 text-lg leading-none">×</button>
-            )}
+        <div className="flex items-center justify-between mb-2">
+          <label className="text-[10px] font-bold text-slate-500 uppercase">Mode de rendu</label>
+          <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+            <button
+              onClick={() => update("isSolo", false)}
+              className={`px-2 py-1 text-[9px] font-bold rounded-md transition-all ${!data.isSolo ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            >ÉQUIPE</button>
+            <button
+              onClick={() => update("isSolo", true)}
+              className={`px-2 py-1 text-[9px] font-bold rounded-md transition-all ${data.isSolo ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            >INDIVIDUEL</button>
           </div>
-        ))}
-        <button onClick={addStudent} className="text-xs text-blue-600 hover:text-blue-800 font-semibold">+ Ajouter un étudiant</button>
+        </div>
+
+        <div className="space-y-2">
+          {data.students.map((s, i) => (
+            <div key={i} className="flex gap-2 items-center">
+              <input
+                className={`flex-1 px-3 py-1.5 text-xs border rounded-lg focus:outline-none focus:ring-2 transition-all ${i === 0 && data.isSolo ? "border-blue-300 ring-2 ring-blue-100 bg-blue-50/30 font-bold" : "border-slate-200 focus:ring-blue-400"}`}
+                placeholder={i === 0 && data.isSolo ? "Votre nom (en gras)" : "Nom et Prénom"}
+                value={s.name}
+                onChange={(e) => updateStudent(i, "name", e.target.value)}
+              />
+              {data.students.length > 1 && (
+                <button onClick={() => removeStudent(i)} className="p-1 px-2 text-slate-300 hover:text-red-500 transition-colors text-lg leading-none">×</button>
+              )}
+            </div>
+          ))}
+        </div>
+        <button onClick={addStudent} className="w-full mt-2 py-1.5 border-2 border-dashed border-slate-200 rounded-lg text-[10px] text-slate-400 font-bold hover:border-blue-300 hover:text-blue-500 transition-all uppercase tracking-wider">+ Ajouter un étudiant</button>
+        {data.isSolo && (
+          <p className="text-[9px] text-blue-500 mt-2 font-medium bg-blue-50 p-1.5 rounded-md border border-blue-100 leading-tight">
+            ℹ️ <b>Mode Individuel activé</b> : Le premier nom sera mis en évidence (gras) sur la page de garde.
+          </p>
+        )}
       </Section>
 
       <Section title="Encadrement">

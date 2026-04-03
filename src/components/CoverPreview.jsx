@@ -30,8 +30,8 @@ export default CoverPreview;
    TEMPLATE ENSIAS — STYLE 1
    ══════════════════════════════════════════════ */
 const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
-  const combinedLogo = fsacLogo;
-  const watermark = "/home/godzilla/.gemini/antigravity/brain/97c47cb5-f4a5-40c4-9aad-4af25b62b5fc/ensias_background_watermark_1775244956084.png";
+  const combinedLogo = "/fsac-logo.jpg";
+  const watermark = "/watermark.png";
 
   const DARK_BLUE = "#1A3A6E";
 
@@ -62,9 +62,21 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
       overflow: "hidden"
     }}>
 
-      {/* Header: Centered Logo */}
-      <div style={{ textAlign: "center", marginBottom: "15mm", display: "flex", justifyContent: "center" }}>
-        <img src={combinedLogo} alt="Logo" style={{ width: "100mm", objectFit: "contain", display: "block" }} />
+      {/* Header: Centered Logo & Master/Diplôme */}
+      <div style={{ textAlign: "center", marginBottom: "8mm", display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <img src={combinedLogo} alt="Logo" style={{ width: "100mm", objectFit: "contain", display: "block", marginBottom: "2mm" }} />
+        {data.master && (
+          <div style={{
+            fontSize: "14pt",
+            fontWeight: "bold",
+            color: DARK_BLUE,
+            textAlign: "center",
+            maxWidth: "80%",
+            lineHeight: 1.2
+          }}>
+            {data.master.toUpperCase()}
+          </div>
+        )}
       </div>
 
       <div style={{ height: "1px", backgroundColor: DARK_BLUE, width: "100%", margin: "5mm 0" }} />
@@ -79,11 +91,11 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
         </div>
       </div>
 
-      <div style={{ flex: 0.3 }} />
+      <div style={{ flex: 0.2 }} />
 
       {/* Project content with Border/Outline */}
       <div style={{
-        margin: "15mm 0",
+        margin: "12mm 0",
         padding: "8mm 12mm",
         border: `2px solid ${DARK_BLUE}`,
         borderRadius: "4px",
@@ -91,7 +103,7 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "40mm"
+        minHeight: "35mm"
       }}>
         <MultilineText text={data.projectTitle || "TITRE DU PROJET"} style={titleStyle} />
       </div>
@@ -103,11 +115,17 @@ const TemplateENSIAS = forwardRef(function TemplateENSIAS({ data }, ref) {
         {/* Team Column */}
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: "12pt", fontStyle: "italic", marginBottom: "3mm", color: "#333", borderBottom: `1px solid ${DARK_BLUE}`, display: "inline-block" }}>
-            Rapport réalisé par l’équipe :
+            {data.isSolo ? "Réalisé par :" : "Rapport réalisé par l’équipe :"}
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "1mm" }}>
             {(data.students || []).map((s, i) => (
-              <div key={i} style={{ fontSize: "13pt", fontWeight: "bold" }}>{s.name}</div>
+              <div key={i} style={{
+                fontSize: "13pt",
+                fontWeight: (i === 0 && data.isSolo) || !data.isSolo ? "bold" : "normal",
+                color: (i === 0 && data.isSolo) ? "#000" : (data.isSolo ? "#666" : "#000")
+              }}>
+                {s.name}
+              </div>
             ))}
           </div>
         </div>

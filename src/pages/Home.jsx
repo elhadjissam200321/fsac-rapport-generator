@@ -27,13 +27,9 @@ export const defaultData = {
     { name: "Sara BENNANI", cne: "" }
   ],
   professor: "CHERGUI BRAHIM",
-  supervisor: "",
-  soutenanceDate: "",
-  soutenancePlace: "",
-  jury: [],
+  master: "",
+  isSolo: false,
   academicYear: "2025/2026",
-  logoUrl: null,
-  logoRight: null,
   UE: "Mathématiques",
   sujet: "Optimisation et Recherche Opérationnelle",
 };
@@ -49,12 +45,13 @@ export default function Home() {
       const overrides = {};
 
       // Simple fields
-      const fields = ["template", "documentType", "UE", "sujet", "projectTitle", "professor", "academicYear", "titleSize"];
+      const fields = ["template", "documentType", "UE", "sujet", "projectTitle", "professor", "academicYear", "master", "titleSize"];
       fields.forEach(f => {
         if (params.has(f)) overrides[f] = params.get(f);
       });
 
-      // Special handling for boolean fields
+      // Boolean fields
+      if (params.has("isSolo")) overrides.isSolo = params.get("isSolo") === "true";
       if (params.has("titleBold")) overrides.titleBold = params.get("titleBold") === "true";
       if (params.has("titleItalic")) overrides.titleItalic = params.get("titleItalic") === "true";
 
@@ -96,7 +93,7 @@ export default function Home() {
 
   const handleShare = () => {
     const params = new URLSearchParams();
-    const fields = ["template", "documentType", "UE", "sujet", "projectTitle", "professor", "academicYear", "titleSize", "titleBold", "titleItalic"];
+    const fields = ["template", "documentType", "UE", "sujet", "projectTitle", "professor", "academicYear", "master", "isSolo", "titleSize", "titleBold", "titleItalic"];
     fields.forEach(f => {
       if (data[f] !== undefined && data[f] !== null) params.set(f, data[f]);
     });
@@ -105,7 +102,7 @@ export default function Home() {
     });
     const url = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
     navigator.clipboard.writeText(url);
-    alert("Lien de partage pré-rempli copié !");
+    toast.success("Lien copié ! Partagez-le avec votre groupe.");
   };
 
   // Calculate preview scale
